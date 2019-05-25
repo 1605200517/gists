@@ -76,17 +76,26 @@ to write them into cache directory.
 Measured time values are averages from 2 runs.
 
 
-| Experiment          |    normal   |  ramdisk | 
-|---------------------|:-----------:|---------:|
-| no .m2 cache        |     140s    |    131s  |      
-| with cache          |      63s    |     60s  |
-| download time       |      77s    |     71s  |
-| no tests with cache |      35s    |     35s
+| Experiment           |    normal   |  ramdisk | 
+|----------------------|:-----------:|---------:|
+| no .m2 cache         |     140s    |    131s  |      
+| with cache           |      63s    |     60s  |
+| download time        |      77s    |     71s  |
+| no tests with cache  |      35s    |     35s  |
+| test time with cache |      28s    |     25s  |
 
 ## Conclusion
 
 There is definitely a slight gain while using ramdisk, but it is also obvious that the real bottleneck is the time
-required to download and cache many small packages from a remote host. Also we see that the pure compilation time without tests is not depending on disk I/O.
+required to download and cache many small packages from a remote host. Also we see that the pure compilation time without tests is not depending on disk I/O. Indepedent of the storage, test require about half of the time.
+
+The build process phases take time as the following:
+| Phase                 | SSD       |   RAM   |
+|-----------------------|:----------|--------:|
+| Download dependencies |    55%    |   54%   | 
+| Compile and package   |    25%    |   27%   |
+| Test                  |    20%    |   19%   |
+
 
 ## Next steps
 
