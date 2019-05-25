@@ -1,4 +1,4 @@
-# Benchmark ramdisk performance for Java program compilation
+# Benchmarking runtime performance for Java program compilation and test
 
 ## Preparation: ramdisk with tmpfs
 
