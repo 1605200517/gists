@@ -86,7 +86,7 @@ Measured time values are averages from 2 runs.
 ## Conclusion
 
 There is definitely a slight gain while using ramdisk, but it is also obvious that the real bottleneck is the time
-required to download and cache many small packages from a remote host.
+required to download and cache many small packages from a remote host. Also we see that the pure compilation time without tests is not depending on disk I/O.
 
 ## Next steps
 
