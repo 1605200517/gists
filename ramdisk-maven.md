@@ -2,7 +2,7 @@
 
 ## Preparation: ramdisk with tmpfs
 
-Check whether you have SSD or not:
+Check whether you have an SSD:
 ```
 cat /sys/block/sda/queue/rotational
 ```
@@ -24,6 +24,22 @@ If you decide later to increase this disk size, update fstab and run:
 ```
 mount -o remount tmpfs
 ```
+
+## Assessing possible optimization targets
+
+While desired result is a production environment capable software artefact, the process can have different depth of desired reproducibility.
+* Full end-to-end reproducibility requires downloading all dependencies from the original repository
+* In terms of CI/CD a local or intranet cache might be enough but tests are important
+* During development depending on the change footprint the developer might run only parts of the compilation and test process, for example for a single module under development. Here responsibility for complete assembly and test coverage are pushed to CI/CD which might reveal possible conflicts with other changes. 
+
+The end-to-end process looks like the following:
+* discover download dependencies if not in cache
+* compile source to binary artefacts
+* execute tests
+* assemble bytecode to packages, depending on requirements with ot without dependencies
+
+An optimization strategy requires facts on system's bottlenecks and measure duration of every process step.
+
 
 ## Experiment 1: compare disk I/O
 ```
@@ -59,11 +75,13 @@ to write them into cache directory.
 
 Measured time values are averages from 2 runs.
 
-| Experiment    |    normal   |  ramdisk | 
-|---------------|:-----------:|---------:|
-| no .m2 cache  |     140s    |    131s  |      
-| with cache    |      63s    |     60s  |
-| download time |      77s    |     71s  |
+
+| Experiment          |    normal   |  ramdisk | 
+|---------------------|:-----------:|---------:|
+| no .m2 cache        |     140s    |    131s  |      
+| with cache          |      63s    |     60s  |
+| download time       |      77s    |     71s  |
+| no tests with cache |      35s    |     35s
 
 ## Conclusion
 
@@ -72,7 +90,13 @@ required to download and cache many small packages from a remote host.
 
 ## Next steps
 
-Repeat experiment with a local mirror. That is if you use a binary package repository software like Nexus or JFrog you
+While ramdisk does not bring enough gain, there could be other optimization vectors.
+
+For example: 
+
+* Try parallel thread execution
+* Try parallel downloads
+* Repeat the experiment with a local mirror. That is if you use a binary package repository software like Nexus or JFrog you
 can tell it to cache packages in your local network.
 
 
