@@ -27,14 +27,14 @@ mount -o remount tmpfs
 
 ## Assessing possible optimization targets
 
-While desired result is a production environment capable software artefact, the process can have different depth of desired reproducibility.
+While desired result is a production environment capable software artifact, the process can have different depth of desired reproducibility.
 * Full end-to-end reproducibility requires downloading all dependencies from the original repository
 * In terms of CI/CD a local or intranet cache might be enough but tests are important
 * During development depending on the change footprint the developer might run only parts of the compilation and test process, for example for a single module under development. Here responsibility for complete assembly and test coverage are pushed to CI/CD which might reveal possible conflicts with other changes. 
 
 The end-to-end process looks like the following:
 * discover download dependencies if not in cache
-* compile source to binary artefacts
+* compile source to binary artifacts
 * execute tests
 * assemble bytecode to packages, depending on requirements with ot without dependencies
 
@@ -87,7 +87,8 @@ Measured time values are averages from 2 runs.
 ## Conclusion
 
 There is definitely a slight gain while using ramdisk, but it is also obvious that the real bottleneck is the time
-required to download and cache many small packages from a remote host. Also we see that the pure compilation time without tests is not depending on disk I/O. Indepedent of the storage, test require about half of the time.
+required to download and cache many small packages from a remote host. Also we see that the pure compilation time without tests is not depending on disk I/O. Indepedent of the storage, tests require about half of the time.
+With much larger artifacts, faster storage would of course outperform the slower one, but also test and download time would increase.
 
 The build process phases take time as the following:
 
