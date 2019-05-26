@@ -33,7 +33,7 @@ While desired result is a production environment capable software artifact, the 
 * During development depending on the change footprint the developer might run only parts of the compilation and test process, for example for a single module under development. Here responsibility for complete assembly and test coverage are pushed to CI/CD which might reveal possible conflicts with other changes. 
 
 The end-to-end process looks like the following:
-* discover download dependencies if not in cache
+* discover and download dependencies if not in cache
 * compile source to binary artifacts
 * execute tests
 * assemble bytecode to packages, depending on requirements with ot without dependencies
@@ -81,13 +81,16 @@ Measured time values are averages from 2 runs.
 | no .m2 cache         |     140s    |    131s  |      
 | with cache           |      63s    |     60s  |
 | download time        |      77s    |     71s  |
-| no tests with cache  |      35s    |     35s  |
+| no tests with cache  |      35s    |     35s*  |
 | test time with cache |      28s    |     25s  |
+
+* I've rounded this value up from 34.94s.
 
 ## Conclusion
 
 There is definitely a slight gain while using ramdisk, but it is also obvious that the real bottleneck is the time
-required to download and cache many small packages from a remote host. Also we see that the pure compilation time without tests is not depending on disk I/O. Indepedent of the storage, tests require about half of the time.
+required to download and cache many small packages from a remote host. Also we see that the pure compilation time without tests is not depending much on disk I/O. Indepedent of the storage, tests for this specific software release require about one fifth of the time.
+
 With much larger artifacts, faster storage would of course outperform the slower one, but also test and download time would increase.
 
 The build process phases take time as the following:
